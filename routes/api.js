@@ -5,6 +5,7 @@ const regCon = require('../controllers/regCon');
 const ovCon = require('../controllers/ovCon');
 const usCon = require('../controllers/usCon');
 const prCon = require('../controllers/prCon');
+const { upload } = require('../helpers/upload');
 
 //registration table
  route.post('/reg_insert', regCon.reg_insDetail);
@@ -28,7 +29,8 @@ route.delete('/us_delete/:id', usCon.us_delDetail);
 route.put('/us_update/:id', usCon.us_upDetail);
 
 // //product table
-route.post('/pr_insert', prCon.pr_insDetail);
+
+route.post('/pr_insert', upload.single('file') ,prCon.pr_insDetail);
 route.get('/pr_select', prCon.pr_selDetail);
 route.get('/pr_select/:id', prCon.pr_select_Detail);
 route.delete('/pr_delete/:id', prCon.pr_delDetail);

@@ -8,7 +8,7 @@ exports.us_insDetail = async(req, res) => {
     const values = req.body;
     
     var sql =
-    "INSERT INTO `users`(`Uname`, `Uemail`, `Upassword`, `Urole`, `Uphone`) VALUES  ?"; 
+    "INSERT INTO `users`(`uname`, `uemail`, `upassword`, `urole`, `uphone`) VALUES  ?"; 
     
     var detail = [
         [
@@ -53,7 +53,7 @@ exports.us_upDetail = async(req, res, next) => {
     var id = req.params.id;
      
     const values = req.body;
-     var sql = "UPDATE users SET Uname= ?,Uemail= ?,Upassword= ?,Urole= ?,Uphone= ?  WHERE users.id = ?";
+     var sql = "UPDATE users SET uname= ?,uemail= ?,upassword= ?,urole= ?,uphone= ?  WHERE users.id = ?";
   
   
      var detail = [

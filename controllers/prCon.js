@@ -1,30 +1,29 @@
-
-
+console.log("prCon called")
 const mysqlDb = require( '../helpers/config' );
+const upload_file = require("../helpers/upload");
+const fetch_file = require('../helpers/product_img_fetch')
 
 exports.pr_insDetail = async(req, res) => {
-    
-    console.log('pr_insDetail called');
-    const values = req.body;
-    console.log(values);
-   
-    var sql =
-    "INSERT INTO `product`(`Pname`,`MRP`,`Dis_price`,`Image`,`Short_des`,`Long_des`,`Status`,`Datetime`,`Registration_id`) VALUES  ?"; 
-    
+  //console.log("okkkkkkkkkk" + req.file.path);  
+  const values = req.body;
+  
+
+  var sql =
+    "INSERT INTO `product`(`pname`,`pm_img`,`pmrp`,`pdes`,`pl_des`,`ptype`,`isactive`,`pimg1`,`pimg2`) VALUES  ?"; 
     var detail = [
         [
-          values.Pname,
-          values.MRP,
-          values.Dis_price,
-          values.Image,
-          values.Short_des,
-          values.Long_des,
-          values.Status,
-          values.Datetime,
-          values.Registration_id
+          values.pname,
+          req.file.path,
+          values.pmrp,
+          values.pdes,
+          values.pl_des,
+          values.ptype,
+          values.status,
+          values.pimg1,
+          values.pimg2
         ]
       ];
-
+      
       mysqlDb.query(sql, [detail], (err, result) => {
         console.log(result);
         if (result.affectedRows > 0) {
@@ -32,7 +31,8 @@ exports.pr_insDetail = async(req, res) => {
             Insert_Id: result.insertId,
             Affected_Rows: result.affectedRows,
             Message: "Data Inserted Succesfully",
-            Data: req.body,
+            Filepath : req.file.path,
+            Data: req.body
           });
         } else {
           return res.send({
@@ -41,11 +41,12 @@ exports.pr_insDetail = async(req, res) => {
           });
         }
     });
-}
+ }
 
 exports.pr_selDetail = (req, res, next) => {
     console.log('pr_selDetail called');
-    mysqlDb.query("SELECT * FROM `product`;", (err, result) => {
+    mysqlDb.query("SELECT * FROM `product`;"  , (err, result) => {
+        
         if(err){  throw err;  }
         console.log(result);
         return res.send(result);
@@ -57,17 +58,18 @@ exports.pr_upDetail = async(req, res, next) => {
     var id = req.params.id;
      
     const values = req.body;
-    sql="UPDATE product SET Pname= ?,MRP= ?,Dis_price= ?,Image= ?,Short_des= ?,Long_des= ?,Status= ?,Datetime= ? WHERE product.id= ?";  
+    sql="UPDATE product SET pname= ?,pm_img= ?,pmrp= ?,pdes= ?,ptype= ?,isActive= ?,pimg1= ?,pimg2= ? WHERE product.id= ?";  
     
     var detail = [
-      values.Pname,
-      values.MRP,
-      values.Dis_price,
-      values.Image,
-      values.Short_des,
-      values.Long_des,
+      values.pname,
+      values.pm_img,
+      values.pmrp,
+      values.pdes,
+      values.pl_des,
+      values.ptype,
       values.Status,
-      values.Datetime,
+      values.pimg1,
+      values.pimg2, 
       id
      ];
    
