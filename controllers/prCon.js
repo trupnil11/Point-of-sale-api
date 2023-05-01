@@ -55,24 +55,40 @@ exports.pr_selDetail = (req, res, next) => {
 
 exports.pr_upDetail = async(req, res, next) => {
     console.log('pr_upDetail called');
+
     var id = req.params.id;
-     
-    const values = req.body;
-    sql="UPDATE product SET pname= ?,pm_img= ?,pmrp= ?,pdes= ?,ptype= ?,isActive= ?,pimg1= ?,pimg2= ? WHERE product.id= ?";  
+    console.log(req.params)
+    console.log(req.body);
     
+    const values = req.body;
+    var img_path;
+
+    if(req.file){
+      img_path = req.file.path;
+    }
+    else{
+      img_path = req.body.old_path;
+    }
+
+    console.log(img_path);
+    var isActive = parseInt(req.body.isactive)
+
+
+    sql="UPDATE product SET pname= ?,pm_img= ?,pmrp= ?,pdes= ?,pl_des=?,ptype= ?,isactive= ?,pimg1= ?,pimg2= ? WHERE product.id= ?";  
+          
     var detail = [
       values.pname,
-      values.pm_img,
+      img_path,
       values.pmrp,
       values.pdes,
       values.pl_des,
       values.ptype,
-      values.Status,
+      isActive,
       values.pimg1,
       values.pimg2, 
       id
      ];
-   
+    //console.log(sql);
      await mysqlDb.query(sql,detail, (err, result) => {
       console.log(result);
       if (result.changedRows > 0) {
@@ -85,8 +101,7 @@ exports.pr_upDetail = async(req, res, next) => {
     } else {
       return res.send({
         Message_1: "Something Went Wrong!",
-        Message_2: "Data Updation Failed!"
-  
+        Message_2: "Data Updation Failed!",
       });
     }
   });

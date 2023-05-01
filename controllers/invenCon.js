@@ -2,37 +2,22 @@
 
 const mysqlDb = require( '../helpers/config' );
 
-exports.ov_insDetail = async(req, res) => {
+exports.in_insDetail = async(req, res) => {
     
-    console.log('ov_insDetail called');
+    console.log('in_insDetail called');
     const values = req.body;
     
    
     var sql =
-    "INSERT INTO `overview`(`B_logo`,`B_dis_name`,`B_name`,`B_wh_no`,`B_web`,`First_day`,`Last_day`,`Opens_at`,`Closing_at`,`Address`,`Country`,`State`,`City`,`Area`,`Pincode`,`Registration_id`) VALUES  ?"; 
+    "INSERT INTO `inventory`(`product_id`,`available_qty`,`minimum_notify_qty`) VALUES  ?"; 
     
     var detail = [
         [
-          values.B_logo,
-          values.B_dis_name,
-          values.B_name,
-          values.B_wh_no,
-          values.B_web,
-          values.First_day,
-          values.Last_day,
-          values.Opens_at,
-          values.Closing_at,
-          values.Address,
-          values.Country,
-          values.State,
-          values.City,
-          values.Area,
-          values.Pincode,
-          values.Registration_id
+          values.product_id,
+          values.available_qty,
+          values.minimum_notify_qty
         ]
       ];
-
-      
 
       mysqlDb.query(sql, [detail], (err, result) => {
         console.log(result);
@@ -53,21 +38,21 @@ exports.ov_insDetail = async(req, res) => {
 }
      
 
-exports.ov_selDetail = (req, res, next) => {
-    console.log('ov_selDetail called');
-    mysqlDb.query("SELECT * FROM `overview`;", (err, result) => {
+exports.in_selDetail = (req, res, next) => {
+    console.log('in_selDetail called');
+    mysqlDb.query("SELECT * FROM `inventory`;", (err, result) => {
         if(err){  throw err;  }
         console.log(result);
         return res.send(result);
     });
 }
 
-exports.ov_upDetail = async(req, res, next) => {
-  console.log('ov_upDetail called'); 
+exports.in_upDetail = async(req, res, next) => {
+  console.log('in_upDetail called'); 
   var id = req.params.id;
    
   const values = req.body;
-   var sql = "UPDATE overview  SET B_logo= ?,B_dis_name= ?,B_name= ?,B_wh_no= ?,B_web= ?,First_day= ?,Last_day= ?,Opens_at= ?,Closing_at= ?,Address= ?,Country= ?,State= ?,City= ?,Area= ?,Pincode= ?  WHERE overview.id = ?";
+   var sql = "UPDATE inventory SET product_id= ?,available_qty= ?,minimum_notify_qty= ?  WHERE inventory.id = ?";
 
 
    var detail = [

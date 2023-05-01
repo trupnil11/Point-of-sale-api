@@ -2,27 +2,26 @@
 const { query } = require('express');
 const mysqlDb = require( '../helpers/config' );
 
-exports.reg_insDetail = async(req, res) => {
+exports.ca_insDetail = async(req, res) => {
     
-    console.log('reg_insDetail called');
+    console.log('ca_insDetail called');
     const values = req.body;
+    console.log(values)
     
    
     var sql =
-    "INSERT INTO `registration` (`Oname`,`Bname`,`Wno`,`Email`,`Password`,`Token`,`Lin_time`,`Lout_time`,`E_verified`) VALUES  ?"; 
+    "INSERT INTO `customers` (`cname`,`cphone`,`cemail`,`caddress`,`ccity`,`cpincode`,`cstate`,`ccountry`) VALUES  ?"; 
     
     var detail = [
         [
-          values.Oname,
-          values.Bname,
-          values.Wno,
-          values.Email,
-          values.Password,
-          values.Token,
-          values.Lin_time,
-          values.Lout_time,
-          values.E_verified
-          
+          values.cname,
+          values.cphone,
+          values.cemail,
+          values.caddress,
+          values.ccity,
+          values.cpincode,
+          values.cstate,
+          values.ccountry          
         ]
       ];
 
@@ -52,9 +51,9 @@ exports.reg_insDetail = async(req, res) => {
   });
 }
 
-exports.reg_selDetail = (req, res, next) => {
-    console.log('reg_selDetail called');
-    mysqlDb.query("SELECT * FROM `registration`;", (err, result) => {
+exports.ca_selDetail = (req, res, next) => {
+    console.log('ca_selDetail called');
+    mysqlDb.query("SELECT * FROM `customers`;", (err, result) => {
         if(err){   
           console.log(err);
           return res.send({
@@ -71,26 +70,24 @@ exports.reg_selDetail = (req, res, next) => {
   });
 }
 
-exports.reg_upDetail = async(req, res, next) => {
-    console.log('reg_upDetail called');
-    var rid = req.params.id;
+exports.ca_upDetail = async(req, res, next) => {
+    console.log('ca_upDetail called');
+    var cid = req.params.id;
 
     const values = req.body;
-var sql = "UPDATE registration  SET Oname = ?,Bname= ?,Wno= ?,Email= ?,Password= ?,Token= ?,Lin_time= ?,Lout_time= ?,E_verified= ?  WHERE registration.id = ?";
+var sql = "UPDATE customers  SET cname = ?,cphone= ?,cemail= ?,caddress= ?,ccity= ?,cpincode= ?,cstate= ?,ccountry= ?  WHERE customers.id = ?";
 
 
     var detail = [
-      
-        values.Oname,
-        values.Bname,
-        values.Wno,
-        values.Email,
-        values.Password,
-        values.Token,
-        values.Lin_time,
-        values.Lout_time,
-        values.E_verified,
-        rid
+      values.cname,
+      values.cphone,
+      values.cemail,
+      values.caddress,
+      values.ccity,
+      values.cpincode,
+      values.cstate,
+      values.ccountry,
+      cid
     ];
    
   await mysqlDb.query(sql,detail, (err, result) => {
@@ -109,7 +106,7 @@ var sql = "UPDATE registration  SET Oname = ?,Bname= ?,Wno= ?,Email= ?,Password=
         });
       }else{
          return res.send({
-         Row_ID: rid,
+         Row_ID: cid,
          Message: "Data Updated Succesfully"
        });
       }      
@@ -117,13 +114,13 @@ var sql = "UPDATE registration  SET Oname = ?,Bname= ?,Wno= ?,Email= ?,Password=
   });
 }
 
-exports.reg_delDetail = async (req, res, next) => {
-    console.log('reg_delDetail called');
-    var rid = req.params.id;
+exports.ca_delDetail = async (req, res, next) => {
+    console.log('ca_delDetail called');
+    var cid = req.params.id;
     
-    sql="DELETE FROM `registration` WHERE `registration`.`id`= ?";
+    sql="DELETE FROM `customers` WHERE `customers`.`id`= ?";
     
-    await mysqlDb.query(sql,rid,(err, result) => {
+    await mysqlDb.query(sql,cid,(err, result) => {
         if(err){   
          console.log(err);
          return res.send({
@@ -139,7 +136,7 @@ exports.reg_delDetail = async (req, res, next) => {
           });
         }else{
            return res.send({
-           Row_ID: rid,
+           Row_ID: cid,
            Message: "Data Deleted Succesfully"
          });
         }
@@ -148,13 +145,13 @@ exports.reg_delDetail = async (req, res, next) => {
   });
 }
 
-exports.reg_select_Detail = async (req, res, next) => {
-  console.log('reg_select_Detail called');
-  var sid = req.params.id;
+exports.ca_select_Detail = async (req, res, next) => {
+  console.log('ca_select_Detail called');
+  var cid = req.params.id;
   
-  sql="SELECT * FROM `registration` WHERE `registration`.`id`= ?";
+  sql="SELECT * FROM `customers` WHERE `customers`.`id`= ?";
   
-  await mysqlDb.query(sql,sid,(err, result) => {
+  await mysqlDb.query(sql,cid,(err, result) => {
       if(err){   
        console.log(err);
        return res.send({
@@ -170,8 +167,9 @@ exports.reg_select_Detail = async (req, res, next) => {
         });
       }else{
          return res.send({
-         Row_ID: rid,
-         Message: "Data Fetched Succesfully"
+         Row_ID: cid,
+         Message: "Data Fetched Succesfully",
+         Data : result
        });
       }
             
