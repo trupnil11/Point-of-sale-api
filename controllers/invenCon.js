@@ -49,29 +49,17 @@ exports.in_selDetail = (req, res, next) => {
 
 exports.in_upDetail = async(req, res, next) => {
   console.log('in_upDetail called'); 
-  var id = req.params.id;
+  var inid = req.params.id;
    
   const values = req.body;
    var sql = "UPDATE inventory SET product_id= ?,available_qty= ?,minimum_notify_qty= ?  WHERE inventory.id = ?";
 
 
    var detail = [
-    values.B_logo,
-    values.B_dis_name,
-    values.B_name,
-    values.B_wh_no,
-    values.B_web,
-    values.First_day,
-    values.Last_day,
-    values.Opens_at,
-    values.Closing_at,
-    values.Address,
-    values.Country,
-    values.State,
-    values.City,
-    values.Area,
-    values.Pincode,
-    id
+    values.product_id,
+    values.available_qty,
+    values.minimum_notify_qty,
+    inid
    ];
  
    await mysqlDb.query(sql,detail, (err, result) => {
@@ -79,7 +67,7 @@ exports.in_upDetail = async(req, res, next) => {
     if (result.changedRows > 0) {
     return res.send({
       Changed_Rows: result.changedRows,
-      Row_ID: id,
+      Row_ID: inid,
       Message: "Data Updated Succesfully",
       Data: req.body,
     });
@@ -94,13 +82,13 @@ exports.in_upDetail = async(req, res, next) => {
 
 }
 
-exports.ov_delDetail = async (req, res, next) => {
-  console.log('ov_delDetail called');
-  var oid = req.params.id;
+exports.in_delDetail = async (req, res, next) => {
+  console.log('in_delDetail called');
+  var inid = req.params.id;
   
-  sql="DELETE FROM `overview` WHERE `overview`.`id`= ?";
+  sql="DELETE FROM `inventory` WHERE `inventory`.`id`= ?";
   
-  await mysqlDb.query(sql,oid,(err, result) => {
+  await mysqlDb.query(sql,inid,(err, result) => {
       if(err){   
        console.log(err);
        return res.send({
@@ -116,7 +104,7 @@ exports.ov_delDetail = async (req, res, next) => {
         });
       }else{
          return res.send({
-         Row_ID: oid,
+         Row_ID: inid,
          Message: "Data Deleted Succesfully"
        });
       }
@@ -125,13 +113,13 @@ exports.ov_delDetail = async (req, res, next) => {
 });
 }
 
-exports.ov_select_Detail = async (req, res, next) => {
-  console.log('ov_select_Detail called');
-  var oid = req.params.id;
+exports.in_select_Detail = async (req, res, next) => {
+  console.log('in_select_Detail called');
+  var inid = req.params.id;
   
-  sql="SELECT * FROM `overview` WHERE `overview`.`id`= ?";
+  sql="SELECT * FROM `inventory` WHERE `inventory`.`id`= ?";
   
-  await mysqlDb.query(sql,oid,(err, result) => {
+  await mysqlDb.query(sql,inid,(err, result) => {
       if(err){   
        console.log(err);
        return res.send({
@@ -142,7 +130,7 @@ exports.ov_select_Detail = async (req, res, next) => {
       console.log(result);
       if(result){
         return res.send({
-          Row_ID: oid,
+          Row_ID: inid,
           Message: "Data Fetched Succesfully",
           Data: result
         });

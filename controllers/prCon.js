@@ -1,7 +1,6 @@
 console.log("prCon called")
 const mysqlDb = require( '../helpers/config' );
 const upload_file = require("../helpers/upload");
-const fetch_file = require('../helpers/product_img_fetch')
 
 exports.pr_insDetail = async(req, res) => {
   //console.log("okkkkkkkkkk" + req.file.path);  
